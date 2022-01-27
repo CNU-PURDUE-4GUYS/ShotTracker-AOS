@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">ShootTraker</string>
+    <string name="bottom_menu_new_game">New Game</string>
+    <string name="bottom_menu_history">History</string>
+    <string name="bottom_menu_info">User Info</string>
+    <string name="start_new_game">Start</string>
+    <string name="total_set">Total Set</string>
+    <string name="total_bullet">Bullet per Set</string>
 </resources>
