@@ -6,7 +6,6 @@ import androidx.fragment.app.Fragment
 import com.example.shoottraker.databinding.ActivityMainBinding
 import com.example.shoottraker.bottomMenu.HistoryFragment
 import com.example.shoottraker.bottomMenu.NewShotFragment
-import com.example.shoottraker.bottomMenu.UserInfoFragment
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
