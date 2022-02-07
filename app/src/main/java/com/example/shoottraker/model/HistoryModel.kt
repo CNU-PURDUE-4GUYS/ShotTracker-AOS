@@ -1,5 +1,5 @@
 package com.example.shoottraker.model
 
-data class History(
+data class HistoryModel(
     val id: String
 )

@@ -1,6 +1,6 @@
 package com.example.shoottraker.model
 
-data class Shot(
+data class ShotModel(
     val date: String, // Shot date
     val imageUrl: String, // Image url
     val totalSet: Int, // Total set count
