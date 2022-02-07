@@ -4,11 +4,13 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.334375" />
+        <entry key="app/src/main/res/drawable/history_item_background.xml" value="0.1890625" />
         <entry key="app/src/main/res/drawable/ic_baseline_accessibility_new_24.xml" value="0.334375" />
         <entry key="app/src/main/res/drawable/ic_baseline_auto_graph_24.xml" value="0.334375" />
         <entry key="app/src/main/res/drawable/ic_baseline_calendar_today_24.xml" value="0.334375" />
         <entry key="app/src/main/res/drawable/ic_baseline_fiber_new_24.xml" value="0.334375" />
         <entry key="app/src/main/res/drawable/ic_launcher_background.xml" value="0.334375" />
+        <entry key="app/src/main/res/drawable/target_image_background.xml" value="0.334375" />
         <entry key="app/src/main/res/layout/activity_each_history.xml" value="0.375" />
         <entry key="app/src/main/res/layout/activity_inshot.xml" value="0.17291666666666666" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.335" />
@@ -17,6 +19,7 @@
         <entry key="app/src/main/res/layout/fragment_blank.xml" value="0.23097826086956522" />
         <entry key="app/src/main/res/layout/fragment_history.xml" value="0.335" />
         <entry key="app/src/main/res/layout/fragment_newshot.xml" value="0.23097826086956522" />
+        <entry key="app/src/main/res/layout/fragment_set_camera.xml" value="0.335" />
         <entry key="app/src/main/res/layout/fragment_userinfo.xml" value="0.23097826086956522" />
         <entry key="app/src/main/res/layout/setting_bullet_count.xml" value="0.24728260869565216" />
         <entry key="app/src/main/res/menu/bottom_menu.xml" value="0.3182291666666667" />
