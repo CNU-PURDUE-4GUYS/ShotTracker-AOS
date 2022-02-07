@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import com.example.shoottraker.databinding.ActivityMainBinding
 import com.example.shoottraker.bottomMenu.HistoryFragment
 import com.example.shoottraker.bottomMenu.NewShotFragment
+import com.example.shoottraker.newShot.SetCameraFragment
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -20,9 +21,18 @@ class MainActivity : AppCompatActivity() {
         initBottomNavigation()
     }
 
-    private fun setFragment(fragment: Fragment) {
+
+    fun setFragment(fragment: Fragment) {
         supportFragmentManager.beginTransaction().run {
             replace(R.id.fragmentContainer, fragment)
+            commit()
+        }
+    }
+
+    fun setAndSaveFragment(fragment: Fragment) {
+        supportFragmentManager.beginTransaction().run {
+            replace(R.id.fragmentContainer, fragment)
+            addToBackStack(null)
             commit()
         }
     }
