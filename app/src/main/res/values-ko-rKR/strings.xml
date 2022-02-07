@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">ShootTraker</string>
+    <string name="bottom_menu_new_game">새로운 게임</string>
+    <string name="bottom_menu_history">게임 기록</string>
+    <string name="bottom_menu_info">사용자 정보</string>
+    <string name="start_new_game">시작하기</string>
+    <string name="set_camera">카메라 세팅</string>
+    <string name="take_picture">타겟 촬영</string>
+    <string name="get_picture">갤러리에서\n가져오기</string>
+    <string name="save_picture">타겟 저장</string>
+</resources>
