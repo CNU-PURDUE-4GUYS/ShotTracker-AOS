@@ -1,15 +1,21 @@
-package com.example.shoottraker.bottomMenu
+package com.example.shoottraker.fragment
 
+import android.content.Intent
+import android.opengl.Visibility
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.shoottraker.R
+import com.example.shoottraker.activity.ShotActivity
 import com.example.shoottraker.adapter.HistoryAdapter
 import com.example.shoottraker.databinding.FragmentHistoryBinding
 import com.example.shoottraker.dto.HistoryDto
+import com.example.shoottraker.model.HistoryModel
 import com.example.shoottraker.service.HistoryService
+import com.google.android.material.snackbar.Snackbar
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -23,7 +29,11 @@ class HistoryFragment : Fragment() {
     }
 
     private val adapter by lazy {
-        HistoryAdapter()
+        HistoryAdapter(itemClickListener = {
+            val intent = Intent(activity, ShotActivity::class.java)
+            intent.putExtra("date", it.id)
+            startActivity(intent)
+        })
     }
 
     override fun onCreateView(
@@ -58,14 +68,23 @@ class HistoryFragment : Fragment() {
                         }
                         response.body()?.let { historyDto ->
                             adapter.submitList(historyDto.histories)
+
                         }
                     }
 
                     override fun onFailure(call: Call<HistoryDto>, t: Throwable) {
-                        // 예외 처리
+                        showNetworkErrorMessage()
                     }
                 }
                 )
         }
+    }
+
+    private fun showNetworkErrorMessage() {
+        binding.errorImageView.visibility = View.VISIBLE
+        binding.errorTextView.visibility = View.VISIBLE
+
+        Snackbar.make(binding.root, R.string.network_error_message, Snackbar.LENGTH_SHORT)
+            .show()
     }
 }

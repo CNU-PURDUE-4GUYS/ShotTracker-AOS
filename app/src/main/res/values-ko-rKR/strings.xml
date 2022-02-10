@@ -9,4 +9,8 @@
     <string name="take_picture">타겟 촬영</string>
     <string name="get_picture">갤러리에서\n가져오기</string>
     <string name="save_picture">타겟 저장</string>
+    <string name="average_size">평균 사이즈</string>
+    <string name="total_bullet">총알 개수</string>
+    <string name="network_error">네트워크 오류</string>
+    <string name="network_error_message">네트워크 연결 상태를 확인해주세요</string>
 </resources>

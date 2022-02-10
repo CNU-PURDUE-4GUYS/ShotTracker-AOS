@@ -1,4 +1,4 @@
-package com.example.shoottraker.newShot
+package com.example.shoottraker.fragment
 
 import android.app.Activity
 import android.content.Intent
@@ -13,15 +13,15 @@ import androidx.fragment.app.Fragment
 import com.example.shoottraker.databinding.FragmentSetCameraBinding
 
 class SetCameraFragment : Fragment() {
-    private lateinit var binding: FragmentSetCameraBinding
+    private val binding by lazy {
+        FragmentSetCameraBinding.inflate(layoutInflater)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentSetCameraBinding.inflate(inflater, container, false)
-
         setGetPictureButton()
         setTakePictureButton()
         setSavePictureButton()
