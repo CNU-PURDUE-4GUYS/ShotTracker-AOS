@@ -1,20 +1,12 @@
-package com.example.shoottraker.bottomMenu
+package com.example.shoottraker.fragment
 
-import android.app.Activity
-import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
-import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.shoottraker.MainActivity
-import com.example.shoottraker.R
 import com.example.shoottraker.databinding.FragmentNewshotBinding
-import com.example.shoottraker.newShot.SetCameraFragment
-import com.google.android.material.snackbar.Snackbar
 
 class NewShotFragment : Fragment() {
     private lateinit var binding: FragmentNewshotBinding
