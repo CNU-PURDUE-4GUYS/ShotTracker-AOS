@@ -8,4 +8,9 @@
     <string name="take_picture">Take Picture</string>
     <string name="get_picture">Get Gallery</string>
     <string name="save_picture">Save</string>
+    <string name="average_size">Average Size</string>
+    <string name="total_bullet">Total Bullet</string>
+    <string name="network_error">Network Error</string>
+    <string name="network_error_message">Check network connection state</string>
+
 </resources>
