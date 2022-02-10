@@ -1,12 +1,13 @@
 package com.example.shoottraker
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.fragment.app.Fragment
+import com.example.shoottraker.bluetooth.BluetoothConnection
 import com.example.shoottraker.databinding.ActivityMainBinding
-import com.example.shoottraker.bottomMenu.HistoryFragment
-import com.example.shoottraker.bottomMenu.NewShotFragment
-import com.example.shoottraker.newShot.SetCameraFragment
+import com.example.shoottraker.fragment.HistoryFragment
+import com.example.shoottraker.fragment.NewShotFragment
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -47,9 +48,10 @@ class MainActivity : AppCompatActivity() {
                     R.id.second -> {
                         setFragment(HistoryFragment())
                     }
-//                    R.id.third -> {
-//                        setFragment(UserInfoFragment())
-//                    }
+                    R.id.third -> {
+                        val intent = Intent(this@MainActivity, BluetoothConnection::class.java)
+                        startActivity(intent)
+                    }
                 }
                 return@setOnItemSelectedListener true
             }
