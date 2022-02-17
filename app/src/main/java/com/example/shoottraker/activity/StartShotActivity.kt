@@ -9,7 +9,6 @@ import android.provider.MediaStore
 import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import com.example.shoottraker.database.BulletDatabase
 import com.example.shoottraker.databinding.ActivityShotBinding
 import com.example.shoottraker.model.Bullet
 import java.io.ByteArrayOutputStream
@@ -26,9 +25,8 @@ class StartShotActivity : AppCompatActivity() {
         strokeWidth = 3F
     }
 
-    private val bullets: ArrayList<Bullet>? = arrayListOf()
+    val bullets: ArrayList<Bullet>? = arrayListOf()
 
-    private var db: BulletDatabase? = null
     private var initState: Boolean = true
 
     private var refUri: String? = null
@@ -47,10 +45,9 @@ class StartShotActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
-        db = BulletDatabase.getInstance(applicationContext)
-
         // First image is received image to intent
         refUri = intent.getStringExtra("refUri")
+        Log.d("kodohyeon", "[again Receive]$refUri")
 
         binding.shotImageView.apply {
             clipToOutline = true
@@ -68,19 +65,6 @@ class StartShotActivity : AppCompatActivity() {
         super.onPause()
 
         overridePendingTransition(0, 0)
-    }
-
-    // Return this activity using back soft key
-    // if you want to reset history, remove remark
-    override fun onResume() {
-        super.onResume()
-
-//        totalBullet = 0
-//        binding.shotTextView.text = totalBullet.toString()
-//        binding.shotImageView.setImageURI(Uri.parse(refUri))
-//
-//        // Reset bulletTraces
-//        bullets!!.clear()
     }
 
 
@@ -120,6 +104,7 @@ class StartShotActivity : AppCompatActivity() {
     // If detect the sound, draw bulletTrace on the reference image
     private fun detectSound() {
         binding.detectSoundButton.setOnClickListener {
+            binding.finishButton.isEnabled = true
             // Todo 블루투스 객체에서 값 받아와서 드로잉하기
             pointX += Random.nextInt(10).toFloat()
             pointY += Random.nextInt(10).toFloat()
@@ -133,23 +118,6 @@ class StartShotActivity : AppCompatActivity() {
         }
     }
 
-    // If finish the shot, intent showShotDetailActivity
-    private fun finishShot() {
-        binding.finishButton.setOnClickListener {
-            val bytes = ByteArrayOutputStream()
-            copyBitmap!!.compress(Bitmap.CompressFormat.PNG, 100, bytes)
-
-            val copyUri = MediaStore.Images.Media.insertImage(contentResolver, copyBitmap, "copyUri", null)
-
-            val intent = Intent(this, ShowShotDetailActivity::class.java)
-            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
-            intent.putExtra("copyUri", copyUri)
-            intent.putExtra("totalBullet", totalBullet.toString())
-
-            startActivity(intent)
-        }
-    }
-
     // In order to draw bulletTraces, Declare inner class overriding onDraw
     private inner class DrawBulletTraces(context: Context) : View(context) {
         override fun onDraw(canvas: Canvas?) {
@@ -157,6 +125,32 @@ class StartShotActivity : AppCompatActivity() {
             canvas?.apply {
                 drawCircle(pointX, pointY, radius, paint!!)
             }
+        }
+    }
+
+    // If finish the shot, intent showShotDetailActivity
+    private fun finishShot() {
+        binding.finishButton.setOnClickListener {
+            val bytes = ByteArrayOutputStream()
+            copyBitmap!!.compress(Bitmap.CompressFormat.PNG, 100, bytes)
+
+            var copyUri =
+                MediaStore.Images.Media.insertImage(
+                    contentResolver,
+                    copyBitmap,
+                    Random(Int.MAX_VALUE).toString(),
+                    null
+                )
+
+            val intent = Intent(this, ShowShotDetailActivity::class.java)
+            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
+            intent.putExtra("refUri", refUri)
+            intent.putExtra("copyUri", copyUri)
+            intent.putExtra("totalBullet", totalBullet.toString())
+            intent.putExtra("bullets", bullets)
+
+            startActivity(intent)
+            finish()
         }
     }
 
