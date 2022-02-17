@@ -12,7 +12,7 @@ class Converters {
     @TypeConverter
     fun toByteArray(bitmap: Bitmap): ByteArray {
         val outputStream = ByteArrayOutputStream()
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 50, outputStream)
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
         return outputStream.toByteArray()
     }
 
