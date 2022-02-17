@@ -12,5 +12,6 @@
     <string name="total_bullet">Total Bullet</string>
     <string name="network_error">Network Error</string>
     <string name="network_error_message">Check network connection state</string>
-
+    <string name="reset_shot">Reset</string>
+    <string name="save_shot">Save</string>
 </resources>
