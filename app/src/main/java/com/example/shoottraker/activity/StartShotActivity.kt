@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.shoottraker.database.BulletDatabase
 import com.example.shoottraker.databinding.ActivityShotBinding
 import com.example.shoottraker.model.Bullet
+import java.io.ByteArrayOutputStream
 import kotlin.random.Random
 
 class StartShotActivity : AppCompatActivity() {
@@ -22,7 +23,7 @@ class StartShotActivity : AppCompatActivity() {
     private val paint: Paint? = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         style = Paint.Style.STROKE
         color = Color.RED
-        strokeWidth = 10F
+        strokeWidth = 3F
     }
 
     private val bullets: ArrayList<Bullet>? = arrayListOf()
@@ -85,12 +86,10 @@ class StartShotActivity : AppCompatActivity() {
 
     // Using DrawBulletTraces class, Draw bulletTraces
     private fun drawBulletTraces() {
-        Log.d("kodohyeon", bullets!!.size.toString())
         for (bullet in bullets!!.iterator()) {
             // Get x, y point in ArrayList<Bullet>
             pointX = bullet.x
             pointY = bullet.y
-            Log.d("kodohyeon", "$pointX 와 $pointY")
 
             // 좌표가 받아질 때 이전 좌표가 조금 변경된 상태로 전달되기 때문에 반복문을 돌며 배번 새롭게 그린다.
             drawBulletTraces = DrawBulletTraces(binding.shotImageView.context)
@@ -121,13 +120,14 @@ class StartShotActivity : AppCompatActivity() {
     // If detect the sound, draw bulletTrace on the reference image
     private fun detectSound() {
         binding.detectSoundButton.setOnClickListener {
-            bullets!!.add(Bullet(null, SET_ID_NUMBER, pointX, pointY))
-            binding.shotTextView.text = (++totalBullet).toString()
-
+            // Todo 블루투스 객체에서 값 받아와서 드로잉하기
             pointX += Random.nextInt(10).toFloat()
             pointY += Random.nextInt(10).toFloat()
 
-            Log.d("kodohyeon", "[Plus] $pointX $pointY")
+            Log.d("kodohyeon", "[Receive] $pointX $pointY")
+
+            bullets!!.add(Bullet(null, SET_ID_NUMBER, pointX, pointY))
+            binding.shotTextView.text = (++totalBullet).toString()
 
             drawBulletTraces()
         }
@@ -136,10 +136,15 @@ class StartShotActivity : AppCompatActivity() {
     // If finish the shot, intent showShotDetailActivity
     private fun finishShot() {
         binding.finishButton.setOnClickListener {
+            val bytes = ByteArrayOutputStream()
+            copyBitmap!!.compress(Bitmap.CompressFormat.PNG, 100, bytes)
+
+            val copyUri = MediaStore.Images.Media.insertImage(contentResolver, copyBitmap, "copyUri", null)
+
             val intent = Intent(this, ShowShotDetailActivity::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
-            intent.putExtra("refUri", refUri)
-            intent.putExtra("totalBullet", totalBullet)
+            intent.putExtra("copyUri", copyUri)
+            intent.putExtra("totalBullet", totalBullet.toString())
 
             startActivity(intent)
         }
