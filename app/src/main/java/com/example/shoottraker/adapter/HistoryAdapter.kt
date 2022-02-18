@@ -2,17 +2,16 @@ package com.example.shoottraker.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.AdapterView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.shoottraker.databinding.ItemHistoryBinding
-import com.example.shoottraker.model.HistoryModel
+import com.example.shoottraker.model.History
 
-class HistoryAdapter(val itemClickListener: (HistoryModel) -> Unit) : ListAdapter<HistoryModel, HistoryAdapter.HistoryViewModel>(diffUtil) {
+class HistoryAdapter(val itemClickListener: (History) -> Unit) : ListAdapter<History, HistoryAdapter.HistoryViewModel>(diffUtil) {
     inner class HistoryViewModel(private val binding: ItemHistoryBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(history: HistoryModel) {
+        fun bind(history: History) {
             binding.totalSetText.text = history.totalSet
             binding.totalShotText.text = history.totalBullet
             binding.averageSizeText.text = history.averageSize
@@ -38,12 +37,12 @@ class HistoryAdapter(val itemClickListener: (HistoryModel) -> Unit) : ListAdapte
     }
 
     companion object {
-        val diffUtil = object : DiffUtil.ItemCallback<HistoryModel>() {
-            override fun areItemsTheSame(oldItem: HistoryModel, newItem: HistoryModel): Boolean {
+        val diffUtil = object : DiffUtil.ItemCallback<History>() {
+            override fun areItemsTheSame(oldItem: History, newItem: History): Boolean {
                 return oldItem.id == newItem.id
             }
 
-            override fun areContentsTheSame(oldItem: HistoryModel, newItem: HistoryModel): Boolean {
+            override fun areContentsTheSame(oldItem: History, newItem: History): Boolean {
                 return oldItem == newItem
             }
         }

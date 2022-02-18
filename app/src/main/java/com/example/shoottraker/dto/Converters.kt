@@ -12,7 +12,7 @@ class Converters {
     @TypeConverter
     fun toByteArray(bitmap: Bitmap): ByteArray {
         val outputStream = ByteArrayOutputStream()
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 50, outputStream)
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
         return outputStream.toByteArray()
     }
 
@@ -22,12 +22,17 @@ class Converters {
     }
 
     @TypeConverter
-    fun from2DFloatToString(value: List<Bullet>): String {
+    fun from2DFloatToString(value: Array<Bullet>): String {
         return Gson().toJson(value)
     }
 
     @TypeConverter
     fun fromStringTo2DFloat(value: String): List<Bullet> {
         return Gson().fromJson(value, Array<Bullet>::class.java).toList()
+    }
+
+    @TypeConverter
+    fun fromStringTo2DArray(value: String) : Array<Array<Float>> {
+        return Gson().fromJson(value, Array<Array<Float>>::class.java)
     }
 }
