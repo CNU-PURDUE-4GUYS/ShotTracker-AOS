@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="5dp"
-    android:background="@drawable/history_item_background"
+    android:background="@drawable/ic_item_background"
     android:orientation="horizontal">
 
     <ImageView

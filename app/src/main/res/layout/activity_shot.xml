@@ -8,6 +8,7 @@
         android:id="@+id/shotImageView"
         android:layout_width="350dp"
         android:layout_height="350dp"
+        android:background="@drawable/ic_item_background"
         android:scaleType="fitXY"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
