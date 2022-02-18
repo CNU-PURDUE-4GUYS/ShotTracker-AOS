@@ -3,25 +3,38 @@ package com.example.shoottraker.fragment
 import android.app.Activity
 import android.content.Intent
 import android.graphics.Bitmap
+import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
+import com.example.shoottraker.database.ReferenceDatabase
 import com.example.shoottraker.databinding.FragmentSetCameraBinding
+import com.example.shoottraker.model.Reference
+import java.io.ByteArrayOutputStream
+import java.util.*
+import kotlin.random.Random
 
 class SetCameraFragment : Fragment() {
     private val binding by lazy {
         FragmentSetCameraBinding.inflate(layoutInflater)
     }
 
+    private var db: ReferenceDatabase? = null
+    private var bitmap: Bitmap? = null
+    private var referenceUri: Uri? = null
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
+        db = ReferenceDatabase.getInstance(activity?.applicationContext)
+
         setGetPictureButton()
         setTakePictureButton()
         setSavePictureButton()
@@ -29,39 +42,56 @@ class SetCameraFragment : Fragment() {
         return binding.root
     }
 
-    // 갤러리에서 이미지를 가져오는 함수
+    // Get Images from gallery
     private fun setGetPictureButton() {
         binding.getPictureButton.setOnClickListener {
             val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
             intent.type = "image/*"
-            startActivityForResult(intent, IMAGE_GET_REQUESTED)
+            startActivityForResult(intent, REQUEST_IMAGE_GALLERY)
         }
     }
 
-    // 카메라에서 이미지를 촬영하는 함수
+    // Get images from camera
     private fun setTakePictureButton() {
         binding.takePictureButton.setOnClickListener {
             setCamera()
         }
     }
 
+    // Intent camera application
     private fun setCamera() {
-        // Todo 일단 간단한 방법으로 임시로 구현함 -> 촬영한 타겟 이미지 화질 향상을 위해 이후에 수정 필요
         val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-        startActivityForResult(intent, IMAGE_CAPTURE_REQUESTED)
+        startActivityForResult(intent, REQUEST_IMAGE_CAPTURE)
     }
 
-    // 저장 이후 이전 프래그먼트로 돌아가는 함수
+    // Save reference image in the Room DB and return before fragment
     private fun setSavePictureButton() {
         binding.savePictureButton.setOnClickListener {
-            val manager = activity?.supportFragmentManager
-            manager?.beginTransaction()?.run {
-                remove(this@SetCameraFragment)
-                commit()
+            // Use thread save in the Room DB
+            try {
+                val referImage = Reference(id = null, refUri = referenceUri.toString())
+                Thread {
+                    db!!.ReferenceDao().insertReferenceImage(referImage)
+                }.start()
+
+                val manager = activity?.supportFragmentManager
+                manager?.beginTransaction()?.run {
+                    remove(this@SetCameraFragment)
+                    commit()
+                }
+                manager?.popBackStack()
+            } catch (e: Error) {
+                Log.d("kodohyeon", "이미지 저장 실패")
             }
-            manager?.popBackStack()
-            Toast.makeText(activity, "이미지 설정이 완료되었습니다.", Toast.LENGTH_SHORT).show()
         }
+    }
+
+    // Get image uri from bitmap
+    private fun getImageUri(bitmap: Bitmap): Uri {
+        val byteOutputStream = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteOutputStream)
+        val path = MediaStore.Images.Media.insertImage(context?.contentResolver, bitmap, Random(Int.MAX_VALUE).toString(), null)
+        return Uri.parse(path)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -69,17 +99,14 @@ class SetCameraFragment : Fragment() {
 
         if (resultCode == Activity.RESULT_OK) {
             when (requestCode) {
-                // 카메라에서 촬영하는 경우
-                IMAGE_CAPTURE_REQUESTED -> {
-                    val bitmap = data?.extras?.get("data") as Bitmap
-                    binding.targetImageView.setImageBitmap(bitmap)
+                REQUEST_IMAGE_CAPTURE -> {
+                    bitmap = data?.extras?.get("data") as Bitmap
+                    referenceUri = getImageUri(bitmap!!)
+                    binding.targetImageView.setImageURI(referenceUri)
                 }
-
-                // 갤러리에서 가져오는 경우
-                IMAGE_GET_REQUESTED -> {
-                    val uri = data?.data
-                    binding.targetImageView.setImageURI(uri)
-
+                REQUEST_IMAGE_GALLERY -> {
+                    referenceUri = data!!.data
+                    binding.targetImageView.setImageURI(referenceUri)
                 }
             }
             binding.savePictureButton.isEnabled = true
@@ -87,7 +114,7 @@ class SetCameraFragment : Fragment() {
     }
 
     companion object {
-        const val IMAGE_CAPTURE_REQUESTED = 30
-        const val IMAGE_GET_REQUESTED = 40
+        const val REQUEST_IMAGE_CAPTURE = 300
+        const val REQUEST_IMAGE_GALLERY = 400
     }
 }
