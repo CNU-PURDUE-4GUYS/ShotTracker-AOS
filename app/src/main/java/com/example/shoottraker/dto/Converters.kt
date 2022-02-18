@@ -22,12 +22,17 @@ class Converters {
     }
 
     @TypeConverter
-    fun from2DFloatToString(value: List<Bullet>): String {
+    fun from2DFloatToString(value: Array<Bullet>): String {
         return Gson().toJson(value)
     }
 
     @TypeConverter
     fun fromStringTo2DFloat(value: String): List<Bullet> {
         return Gson().fromJson(value, Array<Bullet>::class.java).toList()
+    }
+
+    @TypeConverter
+    fun fromStringTo2DArray(value: String) : Array<Array<Float>> {
+        return Gson().fromJson(value, Array<Array<Float>>::class.java)
     }
 }
