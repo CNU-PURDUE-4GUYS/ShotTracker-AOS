@@ -4,23 +4,17 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/targetRecyclerView"
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:padding="8dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <ImageView
         android:id="@+id/targetImageView"
         android:layout_width="350dp"
         android:layout_height="350dp"
-        android:layout_marginTop="16dp"
+        android:background="@drawable/ic_item_background"
+        android:scaleType="fitXY"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/targetRecyclerView" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.25" />
 
     <TextView
         android:id="@+id/totalBullet"
@@ -30,7 +24,7 @@
         android:layout_marginTop="16dp"
         android:layout_marginRight="16dp"
         android:text="@string/total_bullet"
-        android:textSize="32sp"
+        android:textSize="24sp"
         app:layout_constraintEnd_toStartOf="@+id/showTotalBullet"
         app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintStart_toStartOf="parent"
@@ -38,10 +32,10 @@
 
     <TextView
         android:id="@+id/showTotalBullet"
-        android:layout_width="30dp"
+        android:layout_width="60dp"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:textSize="30sp"
+        android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@+id/totalBullet"
         app:layout_constraintEnd_toEndOf="parent"
@@ -56,7 +50,7 @@
         android:layout_marginTop="16dp"
         android:layout_marginRight="16dp"
         android:text="@string/average_size"
-        android:textSize="32sp"
+        android:textSize="24sp"
         app:layout_constraintEnd_toStartOf="@+id/showAverageSize"
         app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintStart_toStartOf="parent"
@@ -64,10 +58,13 @@
 
     <TextView
         android:id="@+id/showAverageSize"
-        android:layout_width="30dp"
+        android:layout_width="60dp"
         android:layout_height="wrap_content"
+        android:ellipsize="end"
         android:gravity="center"
-        android:textSize="30sp"
+        android:lines="1"
+        android:maxLines="1"
+        android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@+id/averageSizeText"
         app:layout_constraintEnd_toEndOf="parent"

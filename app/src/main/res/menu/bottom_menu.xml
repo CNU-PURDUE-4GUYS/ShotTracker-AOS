@@ -10,8 +10,8 @@
         android:icon="@drawable/ic_baseline_calendar_today_24"
         android:title="@string/bottom_menu_history" />
 
-<!--    <item-->
-<!--        android:id="@+id/third"-->
-<!--        android:icon="@drawable/ic_baseline_accessibility_new_24"-->
-<!--        android:title="@string/bottom_menu_info" />-->
+    <item
+        android:id="@+id/third"
+        android:icon="@drawable/ic_baseline_bluetooth_24"
+        android:title="@string/bottom_menu_info" />
 </menu>
