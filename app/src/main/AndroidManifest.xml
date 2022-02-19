@@ -34,7 +34,7 @@
         <activity
             android:name=".activity.StartShotActivity"
             android:launchMode="singleInstance" />
-        <activity android:name=".bluetooth.BluetoothConnection" />
+        <activity android:name=".activity.ConnectBluetoothActivity" />
     </application>
 
 </manifest>
