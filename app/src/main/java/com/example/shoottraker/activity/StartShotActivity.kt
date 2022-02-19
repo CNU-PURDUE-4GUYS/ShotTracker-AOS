@@ -11,7 +11,6 @@ import android.provider.MediaStore
 import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import com.example.shoottraker.bluetooth.BluetoothConnection
 import com.example.shoottraker.databinding.ActivityShotBinding
 import com.example.shoottraker.dto.Converters
 import java.io.ByteArrayOutputStream
@@ -32,7 +31,7 @@ class StartShotActivity : AppCompatActivity() {
     private var deviceMACAddress: String? = null
     private var bluetoothSocket: BluetoothSocket? = null
     private var byte: Char? = null
-    private var savedByte: String? = null
+    private var savedByte: String = ""
     private var thread: Thread? = null
     private var initState: Boolean = true
     private var _isConnected: Boolean = false
@@ -56,6 +55,7 @@ class StartShotActivity : AppCompatActivity() {
     private var pointX: Float = 0F
     private var pointY: Float = 0F
     private var totalBullet: Int = 0
+    private var trial: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -92,60 +92,96 @@ class StartShotActivity : AppCompatActivity() {
             bluetoothSocket =
                 device.createInsecureRfcommSocketToServiceRecord(
                     java.util.UUID.fromString(
-                        BluetoothConnection.UUID
+                        ConnectBluetoothActivity.UUID
                     )
                 )
         }
 
         // Second, Use thread to detect shot sound
-        thread = Thread {
-            while (!_isFinished) {
-                // Using while, try to connect socket
-                while (!_isConnected) {
-                    try {
-                        bluetoothSocket!!.connect()
-                        _isConnected = true
-                    } catch (e: Exception) {
-                        Log.d("kodohyeon", "연결 실패")
-                    }
-
-                }
-
-                // If connect socket success, send target number
-                sendTargetNumber()
-
-                // If connect socket success, receive texts until receive "!"
-                while (true) {
-                    try {
-                        byte = bluetoothSocket!!.inputStream!!.read().toChar()
-                        if (byte == '!') {
-                            Log.d("kodohyeon", "[Receiving] ${savedByte.toString()}")
-                            points = Converters().fromStringTo2DArray(savedByte!!)
-                            // 변환 과정에서 실제 사이즈보다 1이 크게 변환됨
-                            totalBullet = points.size - 1
-                            // Draw target traces
-                            drawBulletTraces()
-                            // Initialize value
-                            savedByte = ""
-                            break
-                        } else {
-                            savedByte += byte
+        try {
+            thread = Thread {
+                while (!_isFinished) {
+                    // Using while, try to connect socket
+                    while (!_isConnected) {
+                        try {
+                            bluetoothSocket!!.connect()
+                            _isConnected = true
+                        } catch (e: Exception) {
+                            Log.d("kodohyeon", "첫번째 연결 실패")
                         }
-                    } catch (e: IOException) {
-                        Log.d("kodohyeon", "연결이 끊겼습니다.")
+                    }
+
+                    // If connect socket success, send target number
+                    sendTargetNumber(1)
+
+                    // Using while, try to connect socket
+                    _isConnected = false
+                    while (!_isConnected) {
+                        try {
+                            bluetoothSocket!!.connect()
+                            _isConnected = true
+                        } catch (e: Exception) {
+                            Log.d("kodohyeon", "두번째 연결 실패")
+                        }
+                    }
+
+                    // If connect socket success, receive texts until receive "!"
+                    while (_isConnected) {
+                        while (true) {
+                            try {
+                                byte = bluetoothSocket!!.inputStream!!.read().toChar()
+                                if (byte == '!') {
+                                    Log.d("kodohyeon", "[Receiving] $savedByte")
+                                    points = Converters().fromStringTo2DArray(savedByte)
+                                    // 변환 과정에서 실제 사이즈보다 1이 크게 변환됨
+                                    totalBullet = points.size
+                                    runOnUiThread {
+                                        binding.shotTextView.text = totalBullet.toString()
+                                    }
+                                    // Draw target traces
+                                    drawBulletTraces()
+                                    // Initialize value
+                                    savedByte = ""
+                                    // Count up
+                                    trial += 1
+                                    break
+                                } else {
+                                    savedByte += byte
+                                }
+                            } catch (e: Exception) {
+                                throw e
+                            }
+                        }
+
+                        // If shot count reach MAX_SHOT, finish all process
+                        if (trial == MAX_SHOT) {
+                            trial = 0
+                            _isFinished = true
+                            break
+                        }
+
+                        _isConnected = false
+                        while (!_isConnected) {
+                            try {
+                                bluetoothSocket!!.connect()
+                                _isConnected = true
+                            } catch (e: Exception) {
+                                Log.d("kodohyeon", "세번쨰 소켓 연결 실패")
+                            }
+                        }
                     }
                 }
-                _isConnected = false
             }
+            // declared thread start
+            thread!!.start()
+        } catch (e: Exception) {
+            Log.d("kodohyeon", "쓰레드 종료")
         }
-
-        // declared thread start
-        thread!!.start()
     }
 
     // Send target number to RPi
-    private fun sendTargetNumber() {
-        val _targetNumber = 1
+    private fun sendTargetNumber(num: Int) {
+        val _targetNumber = num
         try {
             val message = _targetNumber.toString()
             val messageToByte = message.toByteArray()
@@ -154,7 +190,7 @@ class StartShotActivity : AppCompatActivity() {
             )
             Log.d("kodohyeon", "${deviceMACAddress}로 ${message}가 보내졌습니다.")
         } catch (e: IOException) {
-            Log.d("kodohyeon", "블루투스 연결을 확인해주세요.")
+            Log.d("kodohyeon", "메세지 전송을 실패했습니다.")
         }
     }
 
@@ -207,9 +243,19 @@ class StartShotActivity : AppCompatActivity() {
     // If finish the shot, intent showShotDetailActivity
     private fun finishShot() {
         binding.finishButton.setOnClickListener {
+            _isConnected = false
+            while (!_isConnected) {
+                try {
+                    bluetoothSocket!!.connect()
+                    _isConnected = true
+                } catch (e: Exception) {
+                    Log.d("kodohyeon", "연결 실패")
+                }
+            }
+
+            sendTargetNumber(2)
             // Disconnect thread
             _isFinished = true
-            thread!!.interrupt()
 
             // Change bitmap to Uri the drew image
             val bytes = ByteArrayOutputStream()
@@ -233,5 +279,9 @@ class StartShotActivity : AppCompatActivity() {
             startActivity(intent)
             finish()
         }
+    }
+
+    companion object {
+        const val MAX_SHOT = 10
     }
 }
