@@ -6,15 +6,15 @@
 
     <ImageView
         android:id="@+id/shotImageView"
-        android:layout_width="350dp"
-        android:layout_height="350dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:background="@drawable/ic_item_background"
         android:scaleType="fitXY"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.25" />
+        app:layout_constraintVertical_bias="0.01" />
 
     <ImageView
         android:id="@+id/bulletIconImage"
@@ -45,17 +45,10 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="40dp"
         android:layout_marginTop="20dp"
+        android:enabled="false"
         android:text="FINISH"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/bulletIconImage" />
 
-    <Button
-        android:id="@+id/detectSoundButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="SHOT"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/finishButton" />
 </androidx.constraintlayout.widget.ConstraintLayout>
