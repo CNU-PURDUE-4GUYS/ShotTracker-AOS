@@ -13,7 +13,9 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.example.shoottraker.database.BulletDatabase
 import com.example.shoottraker.databinding.ActivityShowShotDetailBinding
+import java.io.ByteArrayOutputStream
 import kotlin.math.*
+import kotlin.random.Random
 import kotlin.system.exitProcess
 
 class ShowShotDetailActivity : AppCompatActivity() {
@@ -24,7 +26,13 @@ class ShowShotDetailActivity : AppCompatActivity() {
     private val paint: Paint? = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         style = Paint.Style.STROKE
         color = Color.RED
-        strokeWidth = 10F
+        strokeWidth = STROKE_WIDTH
+    }
+
+    private val maxPaint: Paint? = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+        style = Paint.Style.STROKE
+        color = Color.BLUE
+        strokeWidth = STROKE_LONG_WIDTH
     }
 
     private var totalBullet: Int? = null
@@ -83,32 +91,51 @@ class ShowShotDetailActivity : AppCompatActivity() {
         }
     }
 
-    // Draw bullet traces using points
+    // Draw bullet traces using points array
     private fun drawBulletTraces() {
         bitmap = MediaStore.Images.Media.getBitmap(contentResolver, Uri.parse(copyUri))
         val copyBitmap = bitmap!!.copy(Bitmap.Config.ARGB_8888, true)
         val drawPoint = DrawDistance(binding.targetImageView.context)
         val canvas = Canvas(copyBitmap)
         drawPoint.draw(canvas)
+
+        // Update targetImageView
         binding.targetImageView.setImageBitmap(copyBitmap)
     }
 
-    // In order to draw longest distance, Declare inner class overriding onDraw
+    // To draw shot group size, Declare inner class overriding onDraw
     private inner class DrawDistance(context: Context) : View(context) {
         override fun onDraw(canvas: Canvas?) {
             super.onDraw(canvas)
 
             canvas?.apply {
+                for (i in points!!.indices) {
+                    for (j in i + 1 until points!!.size) {
+                        if (i == j) continue
+                        drawLine(
+                            points!![i][0],
+                            points!![i][1],
+                            points!![j][0],
+                            points!![j][1],
+                            paint!!
+                        )
+
+                    }
+                }
+
+                // Draw longest distance
                 drawLine(
                     maxValues[0],
                     maxValues[1],
                     maxValues[2],
                     maxValues[3],
-                    paint!!
+                    maxPaint!!
                 )
-                binding.showTotalBullet.text = points!!.size.toString()
-                binding.showAverageSize.text = String.format("%.2f", distance * RATIO)
             }
+
+            // Change the UI
+            binding.showTotalBullet.text = points!!.size.toString()
+            binding.showAverageSize.text = String.format("%.2f", distance * RATIO)
         }
     }
 
@@ -132,6 +159,21 @@ class ShowShotDetailActivity : AppCompatActivity() {
     // Save image in the Room DB
     private fun setSaveButton() {
         binding.shotSaveButton.setOnClickListener {
+            // If finish the shot, save screenshot in gallery
+            val screenshotToView = window.decorView.rootView
+            screenshotToView.isDrawingCacheEnabled = true
+            val viewToBitmap = Bitmap.createBitmap(screenshotToView.drawingCache)
+            screenshotToView.isDrawingCacheEnabled = false
+
+            val bytes = ByteArrayOutputStream()
+            viewToBitmap!!.compress(Bitmap.CompressFormat.PNG, 100, bytes)
+
+            MediaStore.Images.Media.insertImage(
+                contentResolver,
+                viewToBitmap,
+                Random(100).toString(),
+                null
+            )
             finish()
             exitProcess(0)
         }
@@ -139,6 +181,8 @@ class ShowShotDetailActivity : AppCompatActivity() {
 
     // Declare value using pixel to inch
     companion object {
-        const val RATIO = 0.00390087196
+        const val RATIO = 0.008594539939333
+        const val STROKE_WIDTH = 12F
+        const val STROKE_LONG_WIDTH = 15F
     }
 }
