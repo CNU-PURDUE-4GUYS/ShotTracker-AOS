@@ -17,6 +17,8 @@ import java.io.ByteArrayOutputStream
 import java.io.IOException
 import java.lang.Exception
 import kotlin.random.Random
+import android.graphics.Bitmap
+
 
 class StartShotActivity : AppCompatActivity() {
     private val binding by lazy {
@@ -44,14 +46,13 @@ class StartShotActivity : AppCompatActivity() {
     private val paint: Paint? = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         style = Paint.Style.STROKE
         color = Color.RED
-        strokeWidth = 3F
+        strokeWidth = STROKE_WIDTH
     }
     private var refUri: String? = null
     private var bitmap: Bitmap? = null
     private var copyBitmap: Bitmap? = null
     private var canvas: Canvas? = null
     private var drawBulletTraces: DrawBulletTraces? = null
-    private val radius: Float = 20F
     private var pointX: Float = 0F
     private var pointY: Float = 0F
     private var totalBullet: Int = 0
@@ -84,6 +85,7 @@ class StartShotActivity : AppCompatActivity() {
 
     // If detect the sound, draw bulletTrace on the reference image
     private fun detectSound() {
+
         // First, Get information of device using bluetooth
         val devices = bluetoothAdapter.bondedDevices
         devices.forEach { device ->
@@ -107,12 +109,12 @@ class StartShotActivity : AppCompatActivity() {
                             bluetoothSocket!!.connect()
                             _isConnected = true
                         } catch (e: Exception) {
-                            Log.d("kodohyeon", "첫번째 연결 실패")
+                            Log.d("kodohyeon", "래퍼런스 이미지 전송을 위한 연결 중")
                         }
                     }
 
                     // If connect socket success, send target number
-                    sendTargetNumber(1)
+                    sendTargetNumber(TARGET_NUMBER)
 
                     // Using while, try to connect socket
                     _isConnected = false
@@ -121,12 +123,13 @@ class StartShotActivity : AppCompatActivity() {
                             bluetoothSocket!!.connect()
                             _isConnected = true
                         } catch (e: Exception) {
-                            Log.d("kodohyeon", "두번째 연결 실패")
+                            Log.d("kodohyeon", "타겟 좌표 수신을 위한 연결 중")
                         }
                     }
 
                     // If connect socket success, receive texts until receive "!"
                     while (_isConnected) {
+
                         while (true) {
                             try {
                                 byte = bluetoothSocket!!.inputStream!!.read().toChar()
@@ -137,6 +140,7 @@ class StartShotActivity : AppCompatActivity() {
                                     totalBullet = points.size
                                     runOnUiThread {
                                         binding.shotTextView.text = totalBullet.toString()
+                                        binding.finishButton.isEnabled = true
                                     }
                                     // Draw target traces
                                     drawBulletTraces()
@@ -166,7 +170,7 @@ class StartShotActivity : AppCompatActivity() {
                                 bluetoothSocket!!.connect()
                                 _isConnected = true
                             } catch (e: Exception) {
-                                Log.d("kodohyeon", "세번쨰 소켓 연결 실패")
+                                Log.d("kodohyeon", "다음 타겟 좌표 수신을 위한 연결 중")
                             }
                         }
                     }
@@ -235,7 +239,7 @@ class StartShotActivity : AppCompatActivity() {
         override fun onDraw(canvas: Canvas?) {
             super.onDraw(canvas)
             canvas?.apply {
-                drawCircle(pointX, pointY, radius, paint!!)
+                drawCircle(pointX, pointY, RADIUS, paint!!)
             }
         }
     }
@@ -243,17 +247,19 @@ class StartShotActivity : AppCompatActivity() {
     // If finish the shot, intent showShotDetailActivity
     private fun finishShot() {
         binding.finishButton.setOnClickListener {
-            _isConnected = false
-            while (!_isConnected) {
-                try {
-                    bluetoothSocket!!.connect()
-                    _isConnected = true
-                } catch (e: Exception) {
-                    Log.d("kodohyeon", "연결 실패")
-                }
-            }
+//            기존에는 Finish가 눌렸다는 ACK를 전송하기 위해 소켓 재연결이 필요했는데 라즈베리파이 쪽의 MAX_SHOT 을 통해 해결
+//            _isConnected = false
+//            while (!_isConnected) {
+//                try {
+//                    bluetoothSocket!!.connect()
+//                    _isConnected = true
+//                } catch (e: Exception) {
+//                    Log.d("kodohyeon", "연결 실패")
+//                }
+//            }
+//
+//            sendTargetNumber(TARGET_NUMBER)
 
-            sendTargetNumber(2)
             // Disconnect thread
             _isFinished = true
 
@@ -282,6 +288,9 @@ class StartShotActivity : AppCompatActivity() {
     }
 
     companion object {
-        const val MAX_SHOT = 10
+        const val TARGET_NUMBER = 1
+        const val MAX_SHOT = 3
+        const val STROKE_WIDTH = 15F
+        const val RADIUS = 30F
     }
 }
