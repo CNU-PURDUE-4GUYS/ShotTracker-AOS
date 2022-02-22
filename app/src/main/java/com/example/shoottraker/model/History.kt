@@ -6,8 +6,9 @@ import androidx.room.PrimaryKey
 
 @Entity
 data class History(
-    @PrimaryKey val id: String,
-    @ColumnInfo val totalSet: String,
+    @PrimaryKey(autoGenerate = true) val id: Int?,
+    @ColumnInfo val imageUri: String,
+    @ColumnInfo val date: String,
     @ColumnInfo val totalBullet: String,
     @ColumnInfo val averageSize: String
 )
