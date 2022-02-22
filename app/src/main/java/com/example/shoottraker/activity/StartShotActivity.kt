@@ -43,6 +43,7 @@ class StartShotActivity : AppCompatActivity() {
     private var points: Array<Array<Float>> = arrayOf(
         arrayOf()
     )
+
     private val paint: Paint? = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         style = Paint.Style.STROKE
         color = Color.RED

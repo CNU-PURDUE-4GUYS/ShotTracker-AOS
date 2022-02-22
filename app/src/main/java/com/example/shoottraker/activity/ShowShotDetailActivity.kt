@@ -12,8 +12,11 @@ import android.provider.MediaStore
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.example.shoottraker.database.BulletDatabase
+import com.example.shoottraker.database.HistoryDatabase
 import com.example.shoottraker.databinding.ActivityShowShotDetailBinding
-import java.io.ByteArrayOutputStream
+import com.example.shoottraker.model.History
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import kotlin.math.*
 import kotlin.random.Random
 import kotlin.system.exitProcess
@@ -44,12 +47,14 @@ class ShowShotDetailActivity : AppCompatActivity() {
     private var distance: Float = 0F
 
     private var db: BulletDatabase? = null
+    private var historyDb: HistoryDatabase? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
         db = BulletDatabase.getInstance(applicationContext)
+        historyDb = HistoryDatabase.getInstance(applicationContext)
 
         // Initialize variable from intent
         refUri = intent.getStringExtra("refUri")
@@ -99,6 +104,14 @@ class ShowShotDetailActivity : AppCompatActivity() {
         val canvas = Canvas(copyBitmap)
         drawPoint.draw(canvas)
 
+        copyUri =
+            MediaStore.Images.Media.insertImage(
+                contentResolver,
+                copyBitmap,
+                Random(100).toString(),
+                null
+            )
+
         // Update targetImageView
         binding.targetImageView.setImageBitmap(copyBitmap)
     }
@@ -111,7 +124,6 @@ class ShowShotDetailActivity : AppCompatActivity() {
             canvas?.apply {
                 for (i in points!!.indices) {
                     for (j in i + 1 until points!!.size) {
-                        if (i == j) continue
                         drawLine(
                             points!![i][0],
                             points!![i][1],
@@ -160,22 +172,39 @@ class ShowShotDetailActivity : AppCompatActivity() {
     private fun setSaveButton() {
         binding.shotSaveButton.setOnClickListener {
             // If finish the shot, save screenshot in gallery
-            val screenshotToView = window.decorView.rootView
-            screenshotToView.isDrawingCacheEnabled = true
-            val viewToBitmap = Bitmap.createBitmap(screenshotToView.drawingCache)
-            screenshotToView.isDrawingCacheEnabled = false
+//            val screenshotToView = window.decorView.rootView
+//            screenshotToView.isDrawingCacheEnabled = true
+//            val viewToBitmap = Bitmap.createBitmap(screenshotToView.drawingCache)
+//            screenshotToView.isDrawingCacheEnabled = false
+//
+//            val bytes = ByteArrayOutputStream()
+//            viewToBitmap!!.compress(Bitmap.CompressFormat.PNG, 100, bytes)
+//
+//            MediaStore.Images.Media.insertImage(
+//                contentResolver,
+//                viewToBitmap,
+//                Random(100).toString(),
+//                null
+//            )
 
-            val bytes = ByteArrayOutputStream()
-            viewToBitmap!!.compress(Bitmap.CompressFormat.PNG, 100, bytes)
+            // If finish the shot, save information in Room DB
+            val current = LocalDateTime.now()
+            val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+            val formatted = current.format(formatter)
 
-            MediaStore.Images.Media.insertImage(
-                contentResolver,
-                viewToBitmap,
-                Random(100).toString(),
-                null
-            )
+            Thread {
+                historyDb!!.HistoryDao().insertHistory(
+                    History(
+                        id = null,
+                        imageUri = copyUri!!,
+                        date = formatted,
+                        totalBullet = totalBullet.toString(),
+                        averageSize = String.format("%.2f", distance * RATIO)
+                    )
+                )
+            }.start()
+
             finish()
-            exitProcess(0)
         }
     }
 
