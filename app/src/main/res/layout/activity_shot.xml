@@ -45,7 +45,7 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="40dp"
         android:layout_marginTop="20dp"
-        android:enabled="false"
+        android:enabled="true"
         android:text="FINISH"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

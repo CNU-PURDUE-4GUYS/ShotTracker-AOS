@@ -12,7 +12,7 @@
     <string name="save_picture">타겟 저장</string>
     <string name="average_size">탄착군 크기</string>
     <string name="total_bullet">총알 개수</string>
-    <string name="network_error">네트워크 오류</string>
+    <string name="network_error">저장된 데이터가 없습니다.</string>
     <string name="network_error_message">네트워크 연결 상태를 확인해주세요</string>
     <string name="reset_shot">초기화</string>
     <string name="save_shot">저장</string>

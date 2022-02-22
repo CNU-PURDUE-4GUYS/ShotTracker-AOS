@@ -1,19 +1,29 @@
 package com.example.shoottraker.adapter
 
+import android.net.Uri
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.shoottraker.databinding.ItemHistoryBinding
 import com.example.shoottraker.model.History
 
-class HistoryAdapter(val itemClickListener: (History) -> Unit) : ListAdapter<History, HistoryAdapter.HistoryViewModel>(diffUtil) {
+class HistoryAdapter(val itemClickListener: (History) -> Unit) :
+    ListAdapter<History, HistoryAdapter.HistoryViewModel>(diffUtil) {
     inner class HistoryViewModel(private val binding: ItemHistoryBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(history: History) {
-            binding.totalSetText.text = history.totalSet
-            binding.totalShotText.text = history.totalBullet
+            Glide
+                .with(binding.targetImageView.context)
+                .load(Uri.parse(history.imageUri))
+                .into(binding.targetImageView)
+
+            binding.targetImageView.clipToOutline = true
+
+            binding.dateText.text = history.date
+            binding.bulletCountText.text = history.totalBullet
             binding.averageSizeText.text = history.averageSize
 
             binding.root.setOnClickListener {

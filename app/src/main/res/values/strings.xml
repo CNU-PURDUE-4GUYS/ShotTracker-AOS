@@ -11,7 +11,7 @@
     <string name="save_picture">Save</string>
     <string name="average_size">Shot Group Size</string>
     <string name="total_bullet">Bullet Count</string>
-    <string name="network_error">Network Error</string>
+    <string name="network_error">No History</string>
     <string name="network_error_message">Check network connection state</string>
     <string name="reset_shot">Reset</string>
     <string name="save_shot">Save</string>
