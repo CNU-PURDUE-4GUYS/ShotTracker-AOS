@@ -98,7 +98,7 @@
 
 ## 📂 Project Folder
 ``` 
-📂 ShotTraker
+📂 ShotTraker
   ├─ model	
   │  ├─ bullet
   │  ├─ history
