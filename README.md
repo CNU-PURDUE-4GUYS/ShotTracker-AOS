@@ -7,6 +7,7 @@
 ]()
 [ ![Kotlin](https://img.shields.io/badge/kotlin-1.6.1-%237F52FF?logo=kotlin)
 ]()
+  
 [![Pattern](https://img.shields.io/badge/Pattern-MVC-%2328C8AF) ]()
 [![Retrofit](https://img.shields.io/badge/Library-Retrofit-%23%234285F4)  ]()
 [![Glide](https://img.shields.io/badge/Library-Glide-%23%234285F4) ]()
