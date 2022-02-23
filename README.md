@@ -21,7 +21,7 @@
   
 |[Dohyeon Ko](https://github.com/k906506)|[Dongheon Lee](https://github.com/Dongheon97)|[Jisoo Choi](https://github.com/jisoochoi7561)|[Sanghyun Park](https://github.com/hy38)|
 |:----:|:----:|:----:|:----:|
-|Mobile|Web & Server|Detection|Raspberry|
+|Mobile|Detection|Web & Server|Raspberry|
 |<img src="https://github.com/k906506.png" width="100">|<img src="https://github.com/Dongheon97.png" width="100">|<img src="https://github.com/jisoochoi7561.png" width=100>|<img src="https://github.com/hy38.png" width="100">|
   
 </div>
