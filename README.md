@@ -6,6 +6,7 @@
 ]()
 [ ![Kotlin](https://img.shields.io/badge/kotlin-1.6.1-%237F52FF?logo=kotlin)
 ]()
+[![Hits](https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2FCNU-PURDUE-4GUYS%2FShotTraker-AOS&count_bg=%2358DD00&title_bg=%23555555&icon=&icon_color=%23E7E7E7&title=hits&edge_flat=false)](https://hits.seeyoufarm.com)
   
 [![Pattern](https://img.shields.io/badge/Pattern-MVC-%2328C8AF) ]()
 [![Retrofit](https://img.shields.io/badge/Library-Retrofit-%23%234285F4)  ]()
@@ -58,7 +59,7 @@
 ### Shooting
 
 - (Shooting in progress) Draw the actual bullet points on the reference image.
-- (End of shooting) Analyzes the distance between bullets points and Provides the size of the shot group size.
+- (End of shooting) Analyze the distance between bullets points and Provide the size of the shot group size.
 - (End of shooting) Receive actual target image from Raspberry Pi via Bluetooth.
 
 ### History
