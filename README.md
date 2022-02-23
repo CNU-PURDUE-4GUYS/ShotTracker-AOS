@@ -1,5 +1,4 @@
 
-
 <div align="center">
 
 [
@@ -16,23 +15,36 @@
 
 </div>
 
-## 🤼‍♂️ Team Member 🤼‍♀️
+## 🤼‍♂️ Team Member
+
+<div align="center">
+  
 |[Dohyeon Ko](https://github.com/k906506)|[Dongheon Lee](https://github.com/Dongheon97)|[Jisoo Choi](https://github.com/jisoochoi7561)|[Sanghyun Park](https://github.com/hy38)|
 |:----:|:----:|:----:|:----:|
 |Mobile|Web & Server|Detection|Raspberry|
 |<img src="https://github.com/k906506.png" width="100">|<img src="https://github.com/Dongheon97.png" width="100">|<img src="https://github.com/jisoochoi7561.png" width=100>|<img src="https://github.com/hy38.png" width="100">|
+  
+</div>
 
-## 📄 Page 📄
+## 📄 Page
+
+<div align="center">
 
 <img width="900" src="https://user-images.githubusercontent.com/33795856/155391095-21b5d019-2c48-4701-92b8-9bd0e575b5b2.png">
+  
+</div>
 
-### 📄 Pages 📄
+### 📄 Pages
+
+<div align="center">
 
 | Main | Select Target Image | Shooting | History |
 | :--------: | :--------: | :--------: |:--------: |
-|<img src="https://user-images.githubusercontent.com/33795856/155388932-59f0f4b5-3884-46d1-90b0-d7fd10b64d7a.png" height = "280" width="180">|<img src="https://user-images.githubusercontent.com/33795856/155390701-a8eee2b4-578e-4a8b-983d-c50398df6ef7.gif" height = "280" width="180">|<img src="https://user-images.githubusercontent.com/33795856/155392169-9ae6cd4c-fa61-475d-8676-c532378f71a7.png" height = "280" width="180">|<img src="https://user-images.githubusercontent.com/33795856/155392178-653b2934-61d7-49f2-8f86-4b41d9ca9eef.png" height = "280" width="180">|
+|<img src="https://user-images.githubusercontent.com/33795856/155388932-59f0f4b5-3884-46d1-90b0-d7fd10b64d7a.png" height = "350" width="180">|<img src="https://user-images.githubusercontent.com/33795856/155390701-a8eee2b4-578e-4a8b-983d-c50398df6ef7.gif" height = "350" width="180">|<img src="https://user-images.githubusercontent.com/33795856/155392169-9ae6cd4c-fa61-475d-8676-c532378f71a7.png" height = "360" width="180">|<img src="https://user-images.githubusercontent.com/33795856/155392178-653b2934-61d7-49f2-8f86-4b41d9ca9eef.png" height = "360" width="180">|
+  
+</div>
 
-## 📱 Features 📱
+## 📱 Features
 
 ###  Main
 
@@ -53,7 +65,7 @@
 
 - Show history of shooting
 
-## 💡 Technology 💡
+## 💡 Technology
 
 >  *Out stystem don't use networks like LTE, Wi-Fi, so you can use it anytime.*
 >  
@@ -61,21 +73,29 @@
 - Bluetooth 
 - Object Detection & Warping
 
-## 🖇 Topology 🖇
+## 🖇 Topology
+
+<div align="center">
 
 <img width="900" src="https://user-images.githubusercontent.com/33795856/155391286-df2a0cda-328d-46ac-8187-fc776f3abe0e.png">
 
-## ⚙️ System Architecture (Network Ver.) ⚙️
+</div>
+
+## ⚙️ System Architecture (Network Ver.)
+
+<div align="center">
 
 <img width="900" src="https://user-images.githubusercontent.com/33795856/155391323-662472c9-48c0-4b94-bfa2-53e3f5c041ec.png">
+  
+</div>
 
-## 👊 Development Goal 👊
+## 👊 Development Goal
 
 - Use minimum activity.
 - Asynchronous treatment through threads.
 - Reuse components.
 
-## 📂 Project Folder 📂
+## 📂 Project Folder
 ``` 
 📂 ShotTraker
   ├─ model	
